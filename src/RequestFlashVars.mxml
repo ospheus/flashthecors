@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" creationComplete="readData('',
+    function(s:String):void {texto.text = s; sendData('',s)})">
+<mx:Script>
+	<![CDATA[
+   import mx.rpc.events.ResultEvent;
+
+    public function sendData(path:String, data:String):void
+	{
+		
+	    var flashVar:Object = Application.application.parameters
+	    
+	    if( path == ''){
+	         path =	flashVar.UPost;
+	    }
+ 		var urlRequest:URLRequest = new URLRequest(path);
+	    var urlLoader:URLLoader = new URLLoader();
+	    urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+	    urlRequest.method = URLRequestMethod.POST;
+	    urlRequest.data = data;
+	    urlLoader.addEventListener(Event.COMPLETE, urlLoader_complete);
+	    urlLoader.load(urlRequest);
+	
+	    function urlLoader_complete(evt:Event):void {
+	        
+	    }
+	}
+	
+	public function readData(path:String, callback:Function):void
+	{
+	    var dataSet:String;	
+	    var flashVar:Object = Application.application.parameters
+	    
+	    if( path == ''){
+	         path =	flashVar.UReq;
+	    }
+	
+	    var urlRequest:URLRequest = new URLRequest(path);
+	    var urlLoader:URLLoader = new URLLoader();
+	    urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
+	    urlLoader.addEventListener(Event.COMPLETE, urlLoader_complete);
+	    urlLoader.load(urlRequest);
+	
+	    function urlLoader_complete(evt:Event):void {
+	        dataSet = urlLoader.data;
+	        trace(dataSet);
+	        callback(dataSet);
+	    }
+	}
+	
+	
+	]]>
+</mx:Script>
+	<mx:Panel x="0" y="-10" width="100%" height="100%" layout="absolute">
+	</mx:Panel>
+	<mx:TextArea x="11" y="37" width="100%" height="100%" id="texto"/>
+</mx:Application>
